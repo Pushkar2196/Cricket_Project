@@ -50,7 +50,6 @@ public class Match {
                 int run = runsPerBall();
                 if(run == 7){
                     if(team.getWicket() + 1 == 10){
-                        System.out.println("W ");
                         System.out.println(team.getName() + " is all out for " + team.getRuns()+" runs");
                         firstInningsScore = team.getRuns();
                         return;
@@ -78,7 +77,7 @@ public class Match {
                 int run = runsPerBall();
                 if(run == 7){
                     if(team2.getWicket() + 1 == 10){
-                        System.out.println("W ");
+                        System.out.print("W ");
                         System.out.println(team2.getName() + " is all out for " + team2.getRuns()+" runs");
                         secondInningsScore = team2.getRuns();
                         winner = team1.getName();

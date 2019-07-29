@@ -13,10 +13,10 @@ class Player{
     }
 
     public Player(String name, int age, String team, PlayerType playerType) {
-		this.name = name;
-        this.age = age;
+        this.name = name;
+		this.age = age;
         this.team = team;
-		this.playerType = playerType;
+        this.playerType = playerType;
 		int runs = 0;
 		int balls = 0;
 		int sixes = 0;

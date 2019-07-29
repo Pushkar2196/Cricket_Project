@@ -1,5 +1,9 @@
+import java.util.ArrayList;
+
 public class CricketGame {
     public static void  main(String[] args) {
+
+        ArrayList<Player> players=new ArrayList<>();
         Player player11 = new Player("Virat Kohli",30, "India", Player.PlayerType.BATSMAN);
         Player player12 = new Player("Rohit Sharma",30, "India", Player.PlayerType.BATSMAN);
         Player player13 = new Player("Shikhar Dhawan",30, "India", Player.PlayerType.BATSMAN);
@@ -13,6 +17,8 @@ public class CricketGame {
         Player player111 = new Player("Bhumrah",30, "India", Player.PlayerType.BOWLER);
 
         Team team1 = new Team("India", "Virat Kohli", "Rohit Sharma");
+
+
 
         team1.addPlayer(player11);
         team1.addPlayer(player12);
@@ -55,5 +61,10 @@ public class CricketGame {
         Match match = new Match(team1,team2,20);
         MatchController controller = new MatchController(team1,team2,match);
         controller.run();
+    }
+
+    public void addPlayersIntoTeam(Team team,List<Player> player){
+        team.addPlayer(player);
+
     }
 }
