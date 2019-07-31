@@ -3,7 +3,6 @@ import java.util.List;
 
 public class CricketGame {
     public static void  main(String[] args) {
-        String[] players = {"Virat Kohli" , "Rohit Sharma" , "Shikhar Dhawan"};
         Player player11 = new Player("Virat Kohli",30, "India", Player.PlayerType.BATSMAN);
         Player player12 = new Player("Rohit Sharma",30, "India", Player.PlayerType.BATSMAN);
         Player player13 = new Player("Shikhar Dhawan",30, "India", Player.PlayerType.BATSMAN);

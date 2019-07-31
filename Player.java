@@ -8,7 +8,7 @@ class Player{
     private int four;
     private PlayerType playerType;
 
-    public static    enum PlayerType {
+    public static enum PlayerType {
         BATSMAN, BOWLER, WICKETKEEPER, ALLROUNDER
     }
 
@@ -21,6 +21,27 @@ class Player{
         int balls = 0;
         int sixes = 0;
         int four = 0;
+    }
+
+    public void addRuns(int runs) {
+        this.runs += runs;
+    }
+    ;
+
+    public void addBalls() {
+        balls += 1;
+    }
+
+    public void addFour() {
+        four += 1;
+    }
+
+    public void addSixes() {
+        sixes += 1;
+    }
+
+    public int getBalls() {
+        return balls;
     }
 
     public String getName() {

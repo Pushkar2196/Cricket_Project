@@ -8,6 +8,8 @@ public class Team {
     private String viceCaptain;
     private int runs;
     private int wicket;
+    private Player striker;
+    private Player nonStriker;
 
     public Team(String name, String captain, String viceCaptain){
         this.name = name;
@@ -16,6 +18,21 @@ public class Team {
         this.players = new ArrayList<Player>();
         this.runs = 0;
         this.wicket = 0;
+    }
+
+    public void setStriker(Player striker) {
+        this.striker = striker;
+    }
+    public Player getStriker() {
+        return striker;
+    }
+
+    public void setNonStriker(Player nonStriker) {
+        this.nonStriker = nonStriker;
+    }
+
+    public Player getNonStriker() {
+        return nonStriker;
     }
 
     public void addRuns(int run){

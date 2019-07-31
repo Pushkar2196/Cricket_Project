@@ -1,3 +1,4 @@
+import java.util.List;
 
 class MatchController {
     private Team team1;
@@ -34,14 +35,35 @@ class MatchController {
         tossResult = match.getTossResult();
     }
 
-    private void result() {
+    private void scoreBoard() {
+        List<Player> players = team1.getPlayers();
+        System.out.println("\nScoreboard\n");
+        System.out.println(team1.getName()+":");
+        for (Player player : players) {
+            System.out.println(player.getName()+" Runs: "+player.getRuns()+" Balls: "+player.getBalls()+" sixes: "+player.getSixes()+" fours: "+player.getFour());
+        }
+        players = team2.getPlayers();
+        System.out.println("\n"+team2.getName()+":");
+        for (Player player : players) {
+            System.out.println(player.getName()+" Runs: "+player.getRuns()+" Balls: "+player.getBalls()+" sixes: "+player.getSixes()+" fours: "+player.getFour());
+        }
+    }
 
+    private void result() {
+        System.out.println("\nResult:");
+        if(team1.getRuns() > team2.getRuns()) {
+            System.out.println(team1.getName()+" has won the match\n");
+        }
+        else {
+            System.out.println(team2.getName()+" has won the match\n");
+        }
     }
 
     public void run() {
         startToss();
         startFirstInningsGame();
         startSecondInningsGame();
+        scoreBoard();
         result();
     }
 

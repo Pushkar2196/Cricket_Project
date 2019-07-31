@@ -1,3 +1,4 @@
+
 import java.util.*;
 import java.lang.String;
 class Match {
@@ -21,42 +22,90 @@ class Match {
     }
 
     public void toss(){
+        System.out.println();
         String[] toss_outcome = {"00","01","10","11"};
         Random rand = new Random();
         int random_number = rand.nextInt(4);
         tossResult = toss_outcome[random_number];
-        if(tossResult.charAt(0) == '0'){
-            if(tossResult.charAt(1) == '0'){
+        switch (tossResult) {
+            case "00":
                 System.out.println(team1.getName()+" has won the toss and decided to Bat first");
-            }
-            else{
+                break;
+            case "01":
                 System.out.println(team1.getName()+" has won the toss and decided to ball first");
-            }
-        }
-        else{
-            if(tossResult.charAt(1) == '0'){
+                break;
+            case "10":
                 System.out.println(team2.getName()+" has won the toss and decided to Bat first");
-            }
-            else{
+                break;
+            case "11":
                 System.out.println(team2.getName()+" has won the toss and decided to ball first");
-            }
+                break;
+        }
+        System.out.println();
+    }
+
+    private void swapPlayers(Team team){
+        Player temp = team.getStriker();
+        team.setStriker(team.getNonStriker());
+        team.setNonStriker(temp);
+    }
+
+    private void bringNewBatsman(Team team) {
+        team.setStriker(team.getPlayers().get(team.getWicket() + 2));
+    }
+
+    private void setOpeners(Team team) {
+        team.setStriker(team.getPlayers().get(0));
+        team.setNonStriker(team.getPlayers().get(1));
+    }
+
+    private void addRunsByPlayer(Team team, int run) {
+        team.getStriker().addRuns(run);
+        if(run == 4) {
+            team.getStriker().addFour();
+        }
+        else if(run == 6) {
+            team.getStriker().addSixes();
+        }
+        if(run % 2 == 1) {
+            swapPlayers(team);
         }
     }
 
+    private void updateResult(Team team1, Team team2) {
+        winner = team1.getName();
+        losser = team2.getName();
+    }
+
+    private void setFirstInningsScore(Team team) {
+        firstInningsScore = team.getRuns();
+    }
+
+    private void setSecondInningsScore(Team team) {
+        secondInningsScore = team.getRuns();
+    }
+
+    private void printInningsScore(Team team) {
+        System.out.println(team.getName()+": "+team.getRuns()+"/"+team.getWicket());
+    }
+
     public void firstInningsGame(Team team){
-        List<Player> player = team.getPlayers();
+        setOpeners(team);
         for(int i = 0 ; i < OVERS ; i++){
             System.out.print("Over no "+ i +": ");
             for(int j = 0 ; j < 6 ; j++){
-                int run = runsPerBall();
+                int run = runsPerBall(team.getStriker());
+                team.getStriker().addBalls();
                 if(run == 7){
                     if(team.getWicket() + 1 == 10){
+                        team.out();
                         System.out.println("W ");
-                        System.out.println(team.getName() + " is all out for " + team.getRuns()+" runs");
-                        firstInningsScore = team.getRuns();
+                        setFirstInningsScore(team);
+                        printInningsScore(team);
                         return;
                     }
                     else{
+                        bringNewBatsman(team);
                         team.out();
                         System.out.print("W ");
                     }
@@ -64,66 +113,79 @@ class Match {
                 else{
                     System.out.print(run+" ");
                     team.addRuns(run);
-                    player.get(team.getWicket());
+                    addRunsByPlayer(team,run);
                 }
             }
+            swapPlayers(team);
             System.out.println();
         }
-        firstInningsScore = team.getRuns();
+        setFirstInningsScore(team);
+        printInningsScore(team);
     }
 
     public void secondInningsGame(Team team1, Team team2) {
+        setOpeners(team2);
         System.out.println("\nInnings Break\n");
         for(int i = 0 ; i < OVERS ; i++){
             System.out.print("Over no "+ i +": ");
             for(int j = 0 ; j < 6 ; j++){
-                int run = runsPerBall();
+                team2.getStriker().addBalls();
+                int run = runsPerBall(team2.getStriker());
                 if(run == 7){
                     if(team2.getWicket() + 1 == 10){
+                        team2.out();
                         System.out.println("W ");
-                        System.out.println(team2.getName() + " is all out for " + team2.getRuns()+" runs");
-                        secondInningsScore = team2.getRuns();
-                        winner = team1.getName();
-                        losser = team2.getName();
+                        setSecondInningsScore(team2);
+                        printInningsScore(team2);
+                        updateResult(team1,team2);
                         return;
                     }
                     else{
+                        bringNewBatsman(team2);
                         team2.out();
                         System.out.print("W ");
                     }
                 }
                 else{
                     if(team2.getRuns() + run > team1.getRuns()) {
-                        System.out.println(team2.getWicket());
-                        int wicketLeft = 10 - team2.getWicket();
-                        System.out.println(team2.getName() + " won the match by " + wicketLeft +" wickets");
-                        secondInningsScore = team2.getRuns();
-                        winner = team2.getName();
-                        losser = team1.getName();
+                        System.out.println(run+" ");
+                        team2.addRuns(run);
+                        addRunsByPlayer(team2,run);
+                        setSecondInningsScore(team2);
+                        printInningsScore(team2);
+                        updateResult(team2,team1);
                         return;
                     }
-                    else{
-                        team2.addRuns(run);
+                    else {
                         System.out.print(run+" ");
+                        team2.addRuns(run);
+                        addRunsByPlayer(team2,run);
                     }
                 }
             }
             System.out.println();
-            if(i + 1 == OVERS) {
-                int runsRemaining = team1.getRuns() - team2.getRuns();
-                // System.out.println(team1.getRuns()+" "+team2.getRuns());
-                System.out.println(team1.getName() + " won the match by " + runsRemaining + " runs");
-                secondInningsScore = team2.getRuns();
-                winner = team1.getName();
-                losser = team2.getName();
-                return;
-            }
         }
+        printInningsScore(team2);
+        setSecondInningsScore(team2);
+        if(firstInningsScore == secondInningsScore) {
+            System.out.println("Match is draw");
+            return;
+        }
+        int runsRemaining = team1.getRuns() - team2.getRuns();
+        System.out.println(team1.getName() + " won the match by " + runsRemaining + " runs");
+        updateResult(team1,team2);
     }
 
-    public int runsPerBall(){
+    public int runsPerBall(Player player) {
+        int[] batsmanFrequency = {1,1,1,1,1,1,2,2,2,2,3,3,3,4,4,6,6,7};//18
+        int[] bowlerFrequency = {1,1,1,1,2,2,3,4,6,7};//10
         Random rand = new Random();
-        return rand.nextInt(8);
+        if(player.getPlayerType() == Player.PlayerType.BATSMAN || player.getPlayerType() == Player.PlayerType.WICKETKEEPER) {
+            return batsmanFrequency[rand.nextInt(18)];
+        }
+        else{
+            return bowlerFrequency[rand.nextInt(10)];
+        }
     }
 
     public String getTossResult() {
