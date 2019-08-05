@@ -1,15 +1,19 @@
+import com.company.DbConnection;
+import com.company.DbImplement;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class CricketGame {
 
     public static void  main(String[] args) {
-        int noOfMatches = 5;
-        String[] players1 = {"Virat Kohli" , "Rohit Sharma" , "Shikhar Dhawan" , "KL Rahul" , "MS Dhoni" , "Hardik Pandya" , "Kedhar Jadhav" , "Chahal" , "kuldeep Yadav" , "Bhuvneshwar kumar" , "Bhumrah"};
-        String[] playerTypes1 = {"BATSMAN" , "BATSMAN" , "BATSMAN" , "BATSMAN" , "WICKETKEEPER" , "ALLROUNDER" , "ALLROUNDER" , "BOWLER" , "BOWLER" , "BOWLER" , "BOWLER"};
+        DbImplement dbImplement = new DbImplement();
+        int noOfMatches = 2;
 
-        String[] players2 = {"Aaron Finch" , "David Warner" , "Steve Smith" , "Peter Handscomb" , "Alex Carey" , "Marcus Stoinis" , "Glenn Maxwell" , "Pat Cummins" , "Mitchell Starc" , "Jason Behrendorff" , "Nathan Lyon"};
-        String[] playerTypes2 = {"BATSMAN" , "BATSMAN" , "BATSMAN" , "BATSMAN" , "WICKETKEEPER" , "ALLROUNDER" , "ALLROUNDER" , "BOWLER" , "BOWLER" , "BOWLER" , "BOWLER"};
+        String[] players1 = dbImplement.getPlayers("India");
+        String[] playerTypes1 = dbImplement.getPlayerType("India");
+        String[] players2 = dbImplement.getPlayers("Australia");
+        String[] playerTypes2 = dbImplement.getPlayerType("Australia");
 
         Series series = new Series("Paytm Cup",noOfMatches);
         for(int i = 0 ; i < noOfMatches ; i++) {
@@ -20,10 +24,11 @@ public class CricketGame {
         }
         List<Match> matchSeries = series.getSeries();
         for(int i = 0 ; i < series.getSeries().size() ; i++) {
-            System.out.println("\nMatch No: " +(i+1)+"\n");
+            System.out.println("\nMatch No: " +(i+1));
             MatchController controller = new MatchController(matchSeries.get(i));
             controller.run();
         }
+        DbConnection.closeConnection();
     }
 
     private static Team getTeam(String[] players , String[] playerTypes , String Country ) {
