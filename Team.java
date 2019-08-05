@@ -11,13 +11,11 @@ public class Team {
     private Player striker;
     private Player nonStriker;
 
-    public Team(String name, String captain, String viceCaptain){
+    public Team(String name){
         this.name = name;
-        this.captain = captain;
-        this.viceCaptain = viceCaptain;
-        this.players = new ArrayList<Player>();
-        this.runs = 0;
-        this.wicket = 0;
+        players = new ArrayList<Player>();
+        runs = 0;
+        wicket = 0;
     }
 
     public void setStriker(Player striker) {

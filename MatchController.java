@@ -6,9 +6,9 @@ class MatchController {
     private Match match;
     private String tossResult;
 
-    MatchController(Team team1, Team team2, Match match){
-        this.team1 = team1;
-        this.team2 = team2;
+    public MatchController(Match match){
+        team1 = match.getTeam1();
+        team2 = match.getTeam2();
         this.match = match;
     }
 
