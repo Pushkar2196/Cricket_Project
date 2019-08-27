@@ -1,5 +1,5 @@
-import com.company.DbConnection;
-import com.company.DbImplement;
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class CricketGame {
         String[] players2 = dbImplement.getPlayers("Australia");
         String[] playerTypes2 = dbImplement.getPlayerType("Australia");
 
-        Series series = new Series("Paytm Cup",noOfMatches);
+        Series series = new Series("World Cup",noOfMatches);
         for(int i = 0 ; i < noOfMatches ; i++) {
             Team team1 = getTeam(players1,playerTypes1,"India");
             Team team2 = getTeam(players2,playerTypes2,"Australia");
@@ -53,6 +53,9 @@ public class CricketGame {
             }
             Player player = new Player(players[i],30,Country, pType);
             team.addPlayer(player);
+            if((pType == Player.PlayerType.BOWLER) || (pType == Player.PlayerType.ALLROUNDER)){
+                team.addBowler(player);
+            }
         }
         return team;
     }

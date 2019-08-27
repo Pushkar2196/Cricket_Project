@@ -1,7 +1,9 @@
 
+
 import java.util.*;
 import java.lang.String;
-class Match {
+
+public class Match {
     private Team team1;
     private Team team2;
     private String tossResult;
@@ -11,7 +13,8 @@ class Match {
     private int OVERS;
     private String winner;
     private String losser;
-
+   // DbImplement dbImplement = new DbImplement();
+   DbImplement dbImplement = new DbImplement();
     public Match(Team team1, Team team2, int OVERS){
         this.team1 = team1;
         this.team2 = team2;
@@ -43,11 +46,16 @@ class Match {
         }
         System.out.println();
     }
-
+    //DbImplement dbImplement = new DbImplement(team1,team2);
     private void swapPlayers(Team team){
         Player temp = team.getStriker();
         team.setStriker(team.getNonStriker());
         team.setNonStriker(temp);
+    }
+
+    private void changeBowler(Team team) {
+        Random rand = new Random();
+        team.setCurrentBowler(team.getBowlers().get(rand.nextInt(team.getBowlers().size())));
     }
 
     private void bringNewBatsman(Team team) {
@@ -57,6 +65,11 @@ class Match {
     private void setOpeners(Team team) {
         team.setStriker(team.getPlayers().get(0));
         team.setNonStriker(team.getPlayers().get(1));
+    }
+
+    private void setBowler(Team team) {
+        Random rand = new Random();
+        team.setCurrentBowler(team.getBowlers().get(0));
     }
 
     private void addRunsByPlayer(Team team, int run) {
@@ -70,6 +83,10 @@ class Match {
         if(run % 2 == 1) {
             swapPlayers(team);
         }
+    }
+    private void addWicketByPlayer(Team team) {
+        team.getCurrentBowler().addWickets();
+        team.getCurrentBowler().setBallsBowled();
     }
 
     private void updateResult(Team team1, Team team2) {
@@ -88,45 +105,77 @@ class Match {
     private void printInningsScore(Team team) {
         System.out.println(team.getName()+": "+team.getRuns()+"/"+team.getWicket());
     }
-
-    public void firstInningsGame(Team team){
-        setOpeners(team);
+    private void runsGivenByBowler(Player currentBowler, int run) {
+        currentBowler.setRunsGiven(run);
+        currentBowler.setBallsBowled();
+    }
+    public void setTeams(Team team1, Team team2) {
+        this.team1 = team1;
+        this.team2 = team2;
+    }
+    public void firstInningsGame(Team team1, Team team2) {
+        setOpeners(team1);
+        setOpeners(team2);
+        setBowler(team2);
+        setBowler(team1);
         for(int i = 0 ; i < OVERS ; i++){
             System.out.print("Over no "+ i +": ");
+            try
+            {
+                Thread.sleep(2000);
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
             for(int j = 0 ; j < 6 ; j++){
-                int run = runsPerBall(team.getStriker());
-                team.getStriker().addBalls();
+                int run = runsPerBall(team1.getStriker());
+                team1.getStriker().addBalls();
                 if(run == 7){
-                    if(team.getWicket() + 1 == 10){
-                        team.out();
+                    if(team1.getWicket() + 1 == 10){
+                        team1.out();
                         System.out.println("W ");
-                        setFirstInningsScore(team);
-                        printInningsScore(team);
+                        setFirstInningsScore(team1);
+                        addWicketByPlayer(team2);
+                        printInningsScore(team1);
                         return;
                     }
                     else{
-                        bringNewBatsman(team);
-                        team.out();
+                        bringNewBatsman(team1);
+                        team1.out();
+                        addWicketByPlayer(team2);
                         System.out.print("W ");
                     }
                 }
                 else{
                     System.out.print(run+" ");
-                    team.addRuns(run);
-                    addRunsByPlayer(team,run);
+                    team1.addRuns(run);
+                    addRunsByPlayer(team1,run);
+                    runsGivenByBowler(team2.getCurrentBowler(),run);
                 }
             }
-            swapPlayers(team);
+            swapPlayers(team1);
+            changeBowler(team2);
+            dbImplement.updateScore(this,1,i);
             System.out.println();
         }
-        setFirstInningsScore(team);
-        printInningsScore(team);
+        setFirstInningsScore(team1);
+        printInningsScore(team1);
     }
 
     public void secondInningsGame(Team team1, Team team2) {
         setOpeners(team2);
+        setBowler(team1);
         System.out.println("\nInnings Break\n");
         for(int i = 0 ; i < OVERS ; i++){
+            try
+            {
+                Thread.sleep(2000);
+            }
+            catch(InterruptedException e)
+            {
+                e.printStackTrace();
+            }
             System.out.print("Over no "+ i +": ");
             for(int j = 0 ; j < 6 ; j++){
                 team2.getStriker().addBalls();
@@ -138,15 +187,18 @@ class Match {
                         setSecondInningsScore(team2);
                         printInningsScore(team2);
                         updateResult(team1,team2);
+                        addWicketByPlayer(team1);
                         return;
                     }
                     else{
                         bringNewBatsman(team2);
+                        addWicketByPlayer(team1);
                         team2.out();
                         System.out.print("W ");
                     }
                 }
                 else{
+                    runsGivenByBowler(team1.getCurrentBowler(),run);
                     if(team2.getRuns() + run > team1.getRuns()) {
                         System.out.println(run+" ");
                         team2.addRuns(run);
@@ -163,6 +215,8 @@ class Match {
                     }
                 }
             }
+            dbImplement.updateScore(this,2,i);
+            changeBowler(team1);
             System.out.println();
         }
         printInningsScore(team2);

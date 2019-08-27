@@ -1,3 +1,4 @@
+
 class Player{
     private final String name;
     private int age;
@@ -6,9 +7,12 @@ class Player{
     private int balls;
     private int sixes;
     private int four;
+    private int runsGiven;
+    private int ballsBowled;
+    private int wickets;
     private PlayerType playerType;
 
-    public static enum PlayerType {
+    public enum PlayerType {
         BATSMAN, BOWLER, WICKETKEEPER, ALLROUNDER
     }
 
@@ -17,16 +21,18 @@ class Player{
         this.age = age;
         this.team = team;
         this.playerType = playerType;
-        int runs = 0;
-        int balls = 0;
-        int sixes = 0;
-        int four = 0;
+        runs = 0;
+        balls = 0;
+        sixes = 0;
+        four = 0;
+        runsGiven = 0;
+        ballsBowled = 0;
+        wickets = 0;
     }
 
     public void addRuns(int runs) {
         this.runs += runs;
     }
-    ;
 
     public void addBalls() {
         balls += 1;
@@ -66,6 +72,30 @@ class Player{
 
     public int getFour() {
         return four;
+    }
+
+    public int getRunsGiven() {
+        return runsGiven;
+    }
+
+    public void setRunsGiven(int runsGiven) {
+        this.runsGiven += runsGiven;
+    }
+
+    public int getBallsBowled() {
+        return ballsBowled;
+    }
+
+    public void setBallsBowled() {
+        ballsBowled += 1;
+    }
+
+    public int getWickets() {
+        return wickets;
+    }
+
+    public void addWickets() {
+        wickets += 1;
     }
 
     public PlayerType getPlayerType() {
